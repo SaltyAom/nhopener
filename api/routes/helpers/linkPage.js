@@ -33,7 +33,7 @@ const linkPage = (pageData) => {
 		}
 
 	return JSON.parse(`{
-        "link": "https://${prefix}.nhentai.net/galleries/${media_id}/${atPage}.jpg",
+        "link": "https://${prefix}.nhentai.net/galleries/${media_id}/${atPage}.${type[t]}",
         "info": {
             "type": "${type[t]}",
             "width": ${w},

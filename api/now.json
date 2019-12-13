@@ -8,7 +8,8 @@
     }],
     "routes": [
         {
-            "src":"/.*",
+            "src": "/.*",
+            "dest": "index.js",
             "headers": { 
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods": "GET",
@@ -20,6 +21,5 @@
             } 
         }
     ],
-    "regions": ["all"],
-    "alias": "api.nhopener.mystiar.com"
+    "regions": ["all"]
 }
