@@ -2,13 +2,34 @@ const Route = require("express").Router(),
 	Axios = require("axios")
 
 const linkImage = require("./helpers/linkImage"),
-    filterTag = require("./helpers/filterTag"),
-    sanitize = require('./helpers/sanitize')
+	filterTag = require("./helpers/filterTag"),
+	sanitize = require("./helpers/sanitize")
+
+Route.get("/tag", async (req, res) =>
+	res.json({
+		success: false,
+		info: "parameter :tag is required eg: /tag/tailjob"
+	})
+)
 
 Route.get("/tag/:tag", async (req, res) => {
-	let { tag } = req.params,
-		{ data } = await Axios(`https://nhentai.net/api/galleries/search?query=${tag}`),
-		related = []
+	let { tag } = req.params
+
+	try {
+		let { data } = await Axios(
+			`https://nhentai.net/api/galleries/search?query=${tag}`
+		)
+		return res.json(calculate(data))
+	} catch (err) {
+		return es.json({
+			success: false,
+			info: `${tag} isn't existed`
+		})
+	}
+})
+
+const calculate = data => {
+	let related = []
 
 	data.result.map(
 		({
@@ -49,12 +70,10 @@ Route.get("/tag/:tag", async (req, res) => {
 			)
 	)
 
-	res.json(
-		JSON.parse(`{
+	return JSON.parse(`{
             "success": ${true},
             "stories": ${JSON.stringify(related)}
         }`)
-	)
-})
+}
 
 module.exports = Route

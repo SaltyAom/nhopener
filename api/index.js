@@ -1,16 +1,20 @@
-const app = require("express")()
+const express = require("express"),
+	app = express(),
+	{ join } = require("path")
 
 const getData = require("./routes/getData"),
 	getRelated = require("./routes/getRelated"),
-	getTag = require("./routes/getTag")
+	getTag = require("./routes/getTag"),
+	handleError = require("./routes/handleError")
 
 const apicache = require("apicache").middleware,
-    helmet = require("helmet"),
-    cors = require("cors")
-    
-app.use(apicache('12 hours'))
+	helmet = require("helmet"),
+	cors = require("cors")
+
+app.use(apicache("12 hours"))
 app.use(helmet())
 app.use(cors())
+app.use("/src", express.static(join(__dirname, "frontend/src")))
 
 app.use(getData)
 app.use(getRelated)
@@ -22,5 +26,7 @@ app.get("/", (req, res) =>
 		available: ["/:id", "/:id/related", "/tag/:tag"]
 	})
 )
+
+app.use(handleError)
 
 app.listen(3000, () => null)
